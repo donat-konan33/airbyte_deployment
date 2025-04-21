@@ -6,7 +6,8 @@ silver/
 bronze/
 logs/
 temp/*
-
+data/.minio.sys/
+data/
 .venv/
 database/
 abctl-v0.24.0-linux-amd64/
@@ -18,3 +19,6 @@ staging_weather_1_france_weather_2025-02-09.parquet
 test_connection.py
 dags/airbyte_test_dags.py
 compose.yaml
+derby.log
+metastore_db/
+requirements.txt

@@ -1,0 +1,52 @@
+FROM bitnami/spark:3.5.1
+
+# select root user to install packages
+USER root
+
+# tools to debug network issues and install packages
+
+RUN apt-get update && apt-get install -y --no-install-recommends curl nano net-tools\
+    build-essential \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# intall minio client(mc)
+#RUN curl -sSL https://dl.min.io/client/mc/release/linux-amd64/mc -o /usr/local/bin/mc && \
+#    chmod +x /usr/local/bin/mc
+
+# add  Iceberg JAR to Spark 3.5
+RUN curl -L -o /opt/bitnami/spark/jars/iceberg-spark3-runtime.jar \
+    https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.5_2.12/1.5.0/iceberg-spark-runtime-3.5_2.12-1.5.0.jar
+
+
+# UTF-8 support
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
+
+# workdir for spark
+RUN mkdir -p /app
+
+WORKDIR /app
+
+# install py4j and pyspark
+# install findspark to find the spark home
+COPY pyproject.toml poetry.lock ./
+# Copier les jobs si besoin
+COPY ./jobs ./jobs
+
+COPY scripts/spark_master_entrypoint.sh spark_master_entrypoint.sh
+
+RUN chmod +x spark_master_entrypoint.sh
+
+RUN pip3 install --upgrade --no-cache-dir pip \
+    && pip3 install poetry \
+    && poetry self add poetry-plugin-export \
+    poetry export -f requirements.txt --output requirements.txt --without-hashes \
+    && pip3 install --no-cache-dir -r requirements.txt
+    #poetry add py4j pyspark==3.5.1 findspark
+
+
+# change to non-root (bitnami), it's a good practice
+# and also required by spark-submit
+USER 1001
+
+ENTRYPOINT [ "spark_master_entrypoint.sh" ]
