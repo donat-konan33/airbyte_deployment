@@ -59,7 +59,7 @@ sudo mv "$AIRBYTE_DIR/abctl" /usr/local/bin
 
 # cleanup
 rm "$FILENAME"
-rm -rf "$FILENAME" "$OS-$ARCH"
+rm -rf "$AIRBYTE_DIR"
 
 
 # Run Airbyte
@@ -70,8 +70,9 @@ while [[ -z "$EMAIL" ]]; do
     echo "❌ Email is mandatory. Please hit your email."
   fi
 done
+
 read -p -s "Hit your password : " PASSWORD
 echo
 abctl local credentials --email "$EMAIL" --password "$PASSWORD"
 
-echo "✅ Locally abctl installed  ( : ./abctl)"
+echo "✅ Locally abctl installed and ready to use ( : ./abctl)"
