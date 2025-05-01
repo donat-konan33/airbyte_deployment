@@ -36,7 +36,7 @@ COPY pyproject.toml poetry.lock ./
 # Copier les jobs si besoin
 COPY ./jobs ./jobs
 
-COPY scripts/spark_cluster_entrypoint.sh spark_cluster_entrypoint.sh
+COPY scripts/spark_cluster_entrypoint.sh ./spark_cluster_entrypoint.sh
 
 RUN chmod +x spark_cluster_entrypoint.sh
 
@@ -51,4 +51,4 @@ RUN pip3 install --upgrade --no-cache-dir pip \
 # and also required by spark-submit
 USER 1001
 
-ENTRYPOINT [ "spark_cluster_entrypoint.sh" ]
+ENTRYPOINT [ "./spark_cluster_entrypoint.sh" ]
