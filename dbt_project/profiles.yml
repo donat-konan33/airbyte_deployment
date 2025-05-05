@@ -1,14 +1,21 @@
 
 dbt_project:
+  target: dev
   outputs:
     dev:
+      type: spark
       method: thrift
-      schema: default  # ou ton schéma de travail
+      schema: default
       host: spark-master
       port: 10000
-      user:  "{{ enr_var('USER') }}"
-      database: "{{ env_var('DATABASE') }}"
+      user: "{{ env_var('USER') }}"
+      connect_retries: 5
       connect_timeout: 60
-      retries: 1
-      type: spark
-  target: dev
+      retries: 3
+      http_path: ""
+      session_properties:
+        spark.sql.catalog.local: org.apache.iceberg.spark.SparkCatalog
+        spark.sql.catalog.local.type: hadoop
+        spark.sql.catalog.local.warehouse: s3a://warehouse/
+        spark.hadoop.fs.s3a.access.key: "{{ env_var('AWS_ACCESS_KEY_ID') }}"
+        spark.hadoop.fs.s3a.secret.key: "{{ env_var('AWS_SECRET_ACCESS_KEY') }}"

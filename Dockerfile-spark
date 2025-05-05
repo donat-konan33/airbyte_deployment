@@ -19,8 +19,11 @@ RUN curl -L -o /opt/bitnami/spark/jars/iceberg-spark3-runtime.jar \
     https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.5_2.12/1.5.0/iceberg-spark-runtime-3.5_2.12-1.5.0.jar
 
 # create a directory as the metastore database for thrift server
-RUN mkdir -p /data/metastore_db \
-    && chown -R 1001:1001 /data/metastore_db
+# and set the owner to the sparkuser | avoid kerberos issues of spark
+RUN mkdir -p /data \
+    && chown -R 1001:1001 /data  \
+    && echo "sparkuser:x:1001:1001::/home/sparkuser:/bin/bash" >> /etc/passwd
+
 
 # UTF-8 support
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
@@ -30,20 +33,16 @@ RUN mkdir -p /app
 
 WORKDIR /app
 
-# install py4j and pyspark
-# install findspark to find the spark home
-COPY pyproject.toml poetry.lock ./
 # Copier les jobs si besoin
 COPY ./jobs ./jobs
+
+COPY ./requirements.txt ./
 
 COPY scripts/spark_cluster_entrypoint.sh ./spark_cluster_entrypoint.sh
 
 RUN chmod +x spark_cluster_entrypoint.sh
 
 RUN pip3 install --upgrade --no-cache-dir pip \
-    && pip3 install poetry \
-    && poetry self add poetry-plugin-export \
-    && poetry export -f requirements.txt --output requirements.txt --without-hashes \
     && pip3 install --no-cache-dir -r requirements.txt
 
 

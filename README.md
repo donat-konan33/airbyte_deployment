@@ -211,6 +211,14 @@ Ce n’est pas du Python qui est exécuté, mais bien du SQL distribué.
 
 C’est le SparkSession de ton backend (le Spark master, souvent) qui gère la distribution aux workers.
 
+Nous pouvons ajouter des dépendance projet avec la generation automatique d'un ``requirements.txt`` file avec fidèles au dependances de pyproject.toml:
+
+
+```
+    && poetry self add poetry-plugin-export \
+    && poetry export -f requirements.txt --output requirements.txt --without-hashes
+```
+
 ### Connexion de dbt à SPARK via le mode thrift
 Il faudra automaiser le lancement du server thrift dans le conteneur spark-master
 
@@ -279,5 +287,20 @@ $SPARK_HOME/sbin/start-thriftserver.sh \
   --conf spark.sql.catalog.local=org.apache.iceberg.spark.SparkCatalog \
   ... (autres options ici)
 Et ensuite tu connectes Superset avec ce profil ODBC ou JDBC.
+
+### Secure secrets
+
+Docker secret in Prod:
+```
+echo "your-access-key-id" | docker secret create aws_access_key_id -
+echo "your-secret-access-key" | docker secret create aws_secret_access_key -
+```
+
+Or into ``profiles.yml`` config :
+
+- utilize JINJA.
+Note dbt-spark is dbt connector for spark.
+
+
 
 Project is in progress...

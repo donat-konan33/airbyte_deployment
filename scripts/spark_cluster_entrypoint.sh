@@ -4,16 +4,18 @@
 if [ "$SPARK_MODE" == "master" ]; then
   echo "Startup Spark Master and Thrift Server"
 
+  $SPARK_HOME/sbin/start-master.sh
   # start Spark Thrift Server
-  /opt/bitnami/spark/sbin/start-thriftserver.sh \
+  $SPARK_HOME/sbin/start-thriftserver.sh \
     --master spark://spark-master:7077 \
-    --conf spark.sql.catalogImplementation=hive
+    --jars $SPARK_HOME/jars/iceberg-spark3-runtime.jar \
+    --conf spark.sql.warehouse.dir=/data/metastore_db
 
 elif [ "$SPARK_MODE" == "worker" ]; then
   echo "Startup Spark Worker"
 
   # Démarrage du Spark Worker
-  /opt/bitnami/spark/sbin/start-slave.sh \
+  $SPARK_HOME/sbin/start-worker.sh \
     spark://spark-master:7077
 
 else
@@ -23,4 +25,4 @@ fi
 
 
 # display Spark logs
-tail -f /opt/bitnami/spark/logs/*
+tail -f $SPARK_HOME/logs/*

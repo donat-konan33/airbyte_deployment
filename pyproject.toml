@@ -17,7 +17,7 @@ pandas = "2.0.2"
 missingno = "^0.5.2"
 pytest-mock = "^3.14.0"
 jupyterlab = "4.2.4"
-dbt-spark = "1.8.0"
+dbt-spark = {version = "1.8.0", extras = ["PyHive"]}
 
 [tool.poetry.group.dev.dependencies]
 ipython = "8.11.0"

@@ -28,12 +28,13 @@ services:
       - SPARK_STORAGE_PASSWORD=$MINIO_USER_PASSWORD
     ports:
       - "8080:8080"  # Spark Master UI
-      - "7077:7077"  # RPC
+      - "7077:7077"  # RPC (Remote Procedure Call)
       - "10000:10000"  # Thrift
-    command: ["scripts/spark_cluster_entrypoint.sh"]
+    command: ["./spark_cluster_entrypoint.sh"]
     volumes:
       - ./jobs:/app/jobs
       - ./spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
+      - ./scripts/spark_cluster_entrypoint.sh:/app/scripts/spark_cluster_entrypoint.sh
       - thrift-data:/data
     depends_on:
       - minio
@@ -54,10 +55,11 @@ services:
       - spark-master
     ports:
       - "8081:8081"  # Spark Worker UI
-    command: ["scripts/spark_cluster_entrypoint.sh"]
+    command: ["./spark_cluster_entrypoint.sh"]
     volumes:
       - ./jobs:/app/jobs
       - ./spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
+      - ./scripts/spark_cluster_entrypoint.sh:/app/scripts/spark_cluster_entrypoint.sh
 
   spark-worker-2:
     build:
@@ -75,10 +77,11 @@ services:
       - spark-master
     ports:
       - "8082:8081"  # Spark Worker UI
-    command: ["scripts/spark_cluster_entrypoint.sh"]
+    command: ["./spark_cluster_entrypoint.sh"]
     volumes:
       - ./jobs:/app/jobs
       - ./spark-defaults.conf:/opt/bitnami/spark/conf/spark-defaults.conf
+      - ./scripts/spark_cluster_entrypoint.sh:/app/scripts/spark_cluster_entrypoint.sh
 
 
 volumes:
