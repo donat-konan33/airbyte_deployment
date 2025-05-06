@@ -31,7 +31,6 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   dbt_project:
-    +materialized: table
     +catalog: null              # corresponding to spark.sql.catalog.local.*+file_format: iceberg        # enable Iceberg format
     +schema: default             # name of schema logical (Iceberg = namespace)
     # Config indicated by + and applies to all files under models/example/
