@@ -8,8 +8,7 @@ if [ "$SPARK_MODE" == "master" ]; then
   # start Spark Thrift Server
   $SPARK_HOME/sbin/start-thriftserver.sh \
     --master spark://spark-master:7077 \
-    --jars $SPARK_HOME/jars/iceberg-spark3-runtime.jar \
-    --conf spark.sql.warehouse.dir=/data/metastore_db
+    --jars $SPARK_HOME/jars/iceberg-spark3-runtime.jar
 
 elif [ "$SPARK_MODE" == "worker" ]; then
   echo "Startup Spark Worker"

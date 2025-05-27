@@ -7,7 +7,7 @@
 
 with depcode as (
       select *
-      from {{source('raw_old_data', 'depcode')}}
+      from {{source('raw_data', 'depcode')}}
 )
 
 select ST_GEOGFROMWKB(geo_point_2d) as geo_point_2d,

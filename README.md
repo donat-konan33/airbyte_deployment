@@ -220,7 +220,7 @@ Nous pouvons ajouter des dépendance projet avec la generation automatique d'un 
 ```
 
 ### Connexion de dbt à SPARK via le mode thrift
-Il faudra automaiser le lancement du server thrift dans le conteneur spark-master
+Il faudra automatiser le lancement du server thrift dans le conteneur spark-master
 
 Dans le Dockerfile ou manuellement (exemple en bash dans le conteneur spark-master) :
 

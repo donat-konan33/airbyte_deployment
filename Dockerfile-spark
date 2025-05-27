@@ -19,7 +19,7 @@ RUN curl -L -o /opt/bitnami/spark/jars/iceberg-spark3-runtime.jar \
     https://repo1.maven.org/maven2/org/apache/iceberg/iceberg-spark-runtime-3.5_2.12/1.5.0/iceberg-spark-runtime-3.5_2.12-1.5.0.jar
 
 # create a directory as the metastore database for thrift server
-# and set the owner to the sparkuser | avoid kerberos issues of spark
+# and set the owner to the sparkuser | avoid kerberos issues of spark when trying to access spark engine
 RUN mkdir -p /data \
     && chown -R 1001:1001 /data  \
     && echo "sparkuser:x:1001:1001::/home/sparkuser:/bin/bash" >> /etc/passwd

@@ -3,12 +3,15 @@
 version: 2
 
 sources:
-  - name: weatherdata
-    schema: weatherdata
+  - name: raw_data
+    schema: raw
     tables:
       - name: depcode
         identifier: depcode
         description: department with their, an unique code per department
+        external:
+          location: s3a://warehouse/raw/departments/depcode.parquet
+          file_format: parquet
         columns:
           - name: geo_point_2d
             description: Geographical Point, currently in bytes
@@ -31,6 +34,9 @@ sources:
       - name: latestweather
         identifier: latestweather
         description: table gathering all the most weather metrics recorded
+        external:
+          location: s3a://warehouse/raw/weatherdata/currentdata/france_weather_2025-04-13.parquet
+          file_format: parquet
         columns:
           - name: _airbyte_ab_id
             description: "airbyte record id"
@@ -118,6 +124,9 @@ sources:
       - name: fullweather
         identifier: fullweather
         description: table gathering all the most weather metrics recorded from several days until now
+        external:
+          location: s3a://warehouse/raw/weatherdata/fullweather/france_weather_2025-04-13.parquet
+          file_format: parquet
         columns:
           - name: _airbyte_ab_id
             description: "airbyte record id"

@@ -6,7 +6,7 @@
 
 with average_snowdepth as (
   select AVG(snowdepth) AS avg_snowdepth
-  from {{source("raw_old_data", "latest_weather")}}
+  from {{ source("raw_data", "latestweather") }}
 )
 
 select
@@ -49,5 +49,5 @@ select
   sunriseEpoch,
   sunsetEpoch,
 
-from {{source("raw_old_data", "latest_weather")}},
+from {{ source("raw_data", "latestweather") }},
     average_snowdepth
